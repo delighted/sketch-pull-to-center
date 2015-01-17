@@ -1,0 +1,54 @@
+// Move selected objects toward center of artboard
+
+if ([selection count] > 0) { // TODO: Make sure it's a layer.
+  var currentArtboard = [[doc currentPage] currentArtboard],
+    artboardFrame = [currentArtboard frame];
+    artboardWidth = [artboardFrame width],
+    artboardHeight = [artboardFrame height],
+    artboardCenterXPos = artboardWidth / 2,
+    artboardCenterYPos = artboardHeight / 2;
+  
+  var distance = [doc askForUserInput:"Distance to move (in pixels):" initialValue:"0"];
+  for (var i = 0; i < selection.count(); i++) {
+    var layer = selection[i],
+      frame = [layer frame],
+      selectionWidth = [frame width],
+      selectionHeight = [frame height],
+      selectionXPos = [frame x],
+      selectionYPos = [frame y];
+      print("selectionXPos: " + selectionXPos);
+      print("selectionYPos: " + selectionYPos);
+    move(selection[i], artboardCenterXPos, artboardCenterYPos, selectionXPos, selectionYPos, distance);
+  }
+} else {
+  [doc showMessage:"Please make sure you at least one layer selected."];
+}
+
+function move(selection, artboardCenterXPos, artboardCenterYPos, selectionXPos, selectionYPos, distance) {
+  var x = artboardCenterXPos - selectionXPos;
+  var y = artboardCenterYPos - selectionYPos;
+  var angle = Math.atan(y / x);
+  var selectionXPosDiff = Math.round(Math.cos(angle) * distance);
+  var selectionYPosDiff = Math.round(Math.sin(angle) * distance);
+  var newSelectionXPos = newXPosition(selectionXPos, selectionXPosDiff, artboardCenterXPos);
+  var newSelectionYPos = newXPosition(selectionYPos, selectionYPosDiff, artboardCenterYPos);
+  var selectionFrame = [selection frame];
+  [selectionFrame setX:newSelectionXPos];
+  [selectionFrame setY:newSelectionYPos];
+}
+
+function newXPosition(selectionXPos, selectionXPosDiff, artboardCenterXPos) {
+  if (selectionXPos > artboardCenterXPos) {
+    return selectionXPos - Math.abs(selectionXPosDiff);
+  } else {
+    return selectionXPos + Math.abs(selectionXPosDiff);
+  }
+}
+
+function newYPosition(selectionXPos, selectionXPosDiff, artboardCenterYPos) {
+  if (selectionYPos > artboardCenterYPos) {
+    return selectionYPos - Math.abs(selectionYPosDiff);
+  } else {
+    return selectionYPos + Math.abs(selectionYPosDiff);
+  }
+}
