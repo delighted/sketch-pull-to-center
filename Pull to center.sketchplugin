@@ -1,54 +1,112 @@
-// Move selected objects toward center of artboard
+// Pull to center
+//
+// Move selected shapes or layers toward the center of artboard
+//
+// © 2013–2015 Delighted Inc.
 
-if ([selection count] > 0) { // TODO: Make sure it's a layer.
+var hasCurrentArtboard = hasCurrentArtboard();
+var hasValidSelectionCount = hasValidSelectionCount(selection, 1);
+// TODO: Avoid calling if not the required selection count or no artboard.
+var validSelectionTypes = [NSArray arrayWithObjects:[MSShapeGroup class], [MSLayerGroup class]];
+var hasValidSelection = hasValidSelection(selection, validSelectionTypes);
+
+if (hasValidSelection && hasCurrentArtboard && hasValidSelectionCount) {
   var currentArtboard = [[doc currentPage] currentArtboard],
-    artboardFrame = [currentArtboard frame];
+    artboardFrame = [currentArtboard frame],
     artboardWidth = [artboardFrame width],
     artboardHeight = [artboardFrame height],
-    artboardCenterXPos = artboardWidth / 2,
-    artboardCenterYPos = artboardHeight / 2;
-  
-  var distance = [doc askForUserInput:"Distance to move (in pixels):" initialValue:"0"];
-  for (var i = 0; i < selection.count(); i++) {
+    artboardCenterX = artboardWidth / 2,
+    artboardCenterY = artboardHeight / 2;
+
+  var distance = [doc askForUserInput:"Distance to move (pixels):" initialValue:"0"];
+
+  for (var i = 0; i < [selection count]; i++) {
     var layer = selection[i],
       frame = [layer frame],
       selectionWidth = [frame width],
       selectionHeight = [frame height],
-      selectionXPos = [frame x],
-      selectionYPos = [frame y];
-      print("selectionXPos: " + selectionXPos);
-      print("selectionYPos: " + selectionYPos);
-    move(selection[i], artboardCenterXPos, artboardCenterYPos, selectionXPos, selectionYPos, distance);
+      selectionX = [frame x],
+      selectionY = [frame y],
+      selectionCenteredX = selectionX + (selectionWidth / 2),
+      selectionCenteredY = selectionY + (selectionHeight / 2);
+    move(selection[i], artboardCenterX, artboardCenterY, selectionCenteredX, selectionCenteredY, distance);
   }
-} else {
-  [doc showMessage:"Please make sure you at least one layer selected."];
 }
 
-function move(selection, artboardCenterXPos, artboardCenterYPos, selectionXPos, selectionYPos, distance) {
-  var x = artboardCenterXPos - selectionXPos;
-  var y = artboardCenterYPos - selectionYPos;
-  var angle = Math.atan(y / x);
-  var selectionXPosDiff = Math.round(Math.cos(angle) * distance);
-  var selectionYPosDiff = Math.round(Math.sin(angle) * distance);
-  var newSelectionXPos = newXPosition(selectionXPos, selectionXPosDiff, artboardCenterXPos);
-  var newSelectionYPos = newXPosition(selectionYPos, selectionYPosDiff, artboardCenterYPos);
-  var selectionFrame = [selection frame];
-  [selectionFrame setX:newSelectionXPos];
-  [selectionFrame setY:newSelectionYPos];
+function move(selection, artboardCenterX, artboardCenterY, selectionCenteredX, selectionCenteredY, distance) {
+  var x = artboardCenterX - selectionCenteredX,
+    y = artboardCenterY - selectionCenteredY,
+    angle = Math.atan(y / x),
+    selectionXDiff = Math.cos(angle) * distance,
+    selectionYDiff = Math.sin(angle) * distance,
+    newSelectionCenteredX = newXPosition(selectionCenteredX, selectionXDiff, artboardCenterX),
+    newSelectionCenteredY = newYPosition(selectionCenteredY, selectionYDiff, artboardCenterY);
+
+    if ((selectionCenteredX < artboardCenterX) && (newSelectionCenteredX > artboardCenterX)) {
+      newSelectionCenteredX = artboardCenterX;
+    }
+    if ((selectionCenteredX > artboardCenterX) && (newSelectionCenteredX < artboardCenterX)) {
+      newSelectionCenteredX = artboardCenterX;
+    }
+    if ((selectionCenteredY < artboardCenterY) && (newSelectionCenteredY > artboardCenterY)) {
+      newSelectionCenteredY = artboardCenterY;
+    }
+    if ((selectionCenteredY > artboardCenterY) && (newSelectionCenteredY < artboardCenterY)) {
+      newSelectionCenteredY = artboardCenterY;
+    }
+
+    var selectionFrame = [selection frame];
+    var newSelectionX = Math.round(newSelectionCenteredX - ([selectionFrame width] / 2));
+    var newSelectionY = Math.round(newSelectionCenteredY - ([selectionFrame height] / 2));
+  [selectionFrame setX:newSelectionX];
+  [selectionFrame setY:newSelectionY];
 }
 
-function newXPosition(selectionXPos, selectionXPosDiff, artboardCenterXPos) {
-  if (selectionXPos > artboardCenterXPos) {
-    return selectionXPos - Math.abs(selectionXPosDiff);
+function newXPosition(selectionCenteredX, selectionXDiff, artboardCenterX) {
+  if (selectionCenteredX > artboardCenterX) {
+    return selectionCenteredX - Math.abs(selectionXDiff);
   } else {
-    return selectionXPos + Math.abs(selectionXPosDiff);
+    return selectionCenteredX + Math.abs(selectionXDiff);
   }
 }
 
-function newYPosition(selectionXPos, selectionXPosDiff, artboardCenterYPos) {
-  if (selectionYPos > artboardCenterYPos) {
-    return selectionYPos - Math.abs(selectionYPosDiff);
+function newYPosition(selectionCenteredY, selectionYDiff, artboardCenterY) {
+  if (selectionCenteredY > artboardCenterY) {
+    return selectionCenteredY - Math.abs(selectionYDiff);
   } else {
-    return selectionYPos + Math.abs(selectionYPosDiff);
+    return selectionCenteredY + Math.abs(selectionYDiff);
   }
+}
+
+function hasCurrentArtboard() {
+  if ([[doc currentPage] currentArtboard]) {
+    return true;
+  } else {
+    [doc showMessage:"Please make sure the shapes or layers you are moving are within an artboard."];
+    return false;
+  }
+}
+
+function hasValidSelectionCount(selection, minSelectionCount) {
+  if ([selection count] >= minSelectionCount) {
+    return true;
+  } else {
+    errorMsg = "Please make sure at least " + minSelectionCount + " shape or layer is selected."
+    [doc showMessage:errorMsg];
+    return false;
+  }
+}
+
+function hasValidSelection(selection, validSelectionTypes) {
+  var hasValidSelection = true;
+  var loop = [selection objectEnumerator];
+  while (selectionItem = [loop nextObject]) {
+    if (hasValidSelection) {
+      if (![validSelectionTypes containsObject:[selectionItem class]]) {
+        hasValidSelection = false;
+        [doc showMessage:"Please make sure you have ONLY shapes or layers selected."];
+      }
+    }
+  }
+  return hasValidSelection;
 }
