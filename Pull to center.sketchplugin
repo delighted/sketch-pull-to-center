@@ -2,7 +2,7 @@
 //
 // Move selected shapes or layers toward the center of artboard
 //
-// © 2013–2015 Delighted Inc.
+// Copyright (c) 2015 Mike Gowen, Delighted Inc.
 
 var hasCurrentArtboard = hasCurrentArtboard();
 var hasValidSelectionCount = hasValidSelectionCount(selection, 1);
