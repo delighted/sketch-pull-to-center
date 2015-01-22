@@ -17,7 +17,7 @@ Sketch plugin to move selected shapes or layers toward the center of artboard.
 
 1. Select one or more shapes or layers.
 2. Navigate to "Plugins > Pull to center".
-3. Type the distance in pixels you like to move the shapes or layers and click "OK".
+3. Type the distance in pixels you'd like to move the shapes or layers and click "OK".
 
 ## Feedback
 
