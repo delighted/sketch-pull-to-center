@@ -20,8 +20,9 @@ if (hasValidSelection && hasCurrentArtboard && hasValidSelectionCount) {
 
   var distance = [doc askForUserInput:"Distance to move (pixels):" initialValue:"0"];
 
-  for (var i = 0; i < [selection count]; i++) {
-    var layer = selection[i],
+  var loop = [selection objectEnumerator];
+  while (selectionItem = [loop nextObject]) {
+    var layer = selectionItem,
       frame = [layer frame],
       selectionWidth = [frame width],
       selectionHeight = [frame height],
@@ -29,7 +30,7 @@ if (hasValidSelection && hasCurrentArtboard && hasValidSelectionCount) {
       selectionY = [frame y],
       selectionCenteredX = selectionX + (selectionWidth / 2),
       selectionCenteredY = selectionY + (selectionHeight / 2);
-    move(selection[i], artboardCenterX, artboardCenterY, selectionCenteredX, selectionCenteredY, distance);
+    move(selectionItem, artboardCenterX, artboardCenterY, selectionCenteredX, selectionCenteredY, distance);
   }
 }
 
