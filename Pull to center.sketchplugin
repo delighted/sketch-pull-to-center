@@ -17,10 +17,9 @@ if (hasValidSelection && hasCurrentArtboard && hasValidSelectionCount) {
     artboardHeight = [artboardFrame height],
     artboardCenterX = artboardWidth / 2,
     artboardCenterY = artboardHeight / 2;
-
   var distance = [doc askForUserInput:"Distance to move (pixels):" initialValue:"0"];
-
   var loop = [selection objectEnumerator];
+
   while (selectionItem = [loop nextObject]) {
     var layer = selectionItem,
       frame = [layer frame],
@@ -92,7 +91,7 @@ function hasValidSelectionCount(selection, minSelectionCount) {
   if ([selection count] >= minSelectionCount) {
     return true;
   } else {
-    errorMsg = "Please make sure at least " + minSelectionCount + " shape or layer is selected."
+    var errorMsg = "Please make sure at least " + minSelectionCount + " shape or layer is selected.";
     [doc showMessage:errorMsg];
     return false;
   }
@@ -101,6 +100,7 @@ function hasValidSelectionCount(selection, minSelectionCount) {
 function hasValidSelection(selection, validSelectionTypes) {
   var hasValidSelection = true;
   var loop = [selection objectEnumerator];
+
   while (selectionItem = [loop nextObject]) {
     if (hasValidSelection) {
       if (![validSelectionTypes containsObject:[selectionItem class]]) {
