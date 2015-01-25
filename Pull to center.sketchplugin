@@ -4,13 +4,13 @@
 //
 // Copyright (c) 2015 Mike Gowen, Delighted Inc.
 
-var hasCurrentArtboard = hasCurrentArtboard();
+var hasSingleArtboardParents = hasSingleArtboardParents(selection);
 var hasValidSelectionCount = hasValidSelectionCount(selection, 1);
 // TODO: Avoid calling if not the required selection count or no artboard.
 var validSelectionTypes = [NSArray arrayWithObjects:[MSShapeGroup class], [MSLayerGroup class]];
 var hasValidSelection = hasValidSelection(selection, validSelectionTypes);
 
-if (hasValidSelection && hasCurrentArtboard && hasValidSelectionCount) {
+if (hasValidSelection && hasValidSelectionCount && hasSingleArtboardParents) {
   var currentArtboard = [[doc currentPage] currentArtboard],
     artboardFrame = [currentArtboard frame],
     artboardWidth = [artboardFrame width],
@@ -78,13 +78,31 @@ function newYPosition(selectionCenteredY, selectionYDiff, artboardCenterY) {
   }
 }
 
-function hasCurrentArtboard() {
-  if ([[doc currentPage] currentArtboard]) {
-    return true;
-  } else {
-    [doc showMessage:"Please make sure the shapes or layers you are moving are within an artboard."];
-    return false;
+function hasSingleArtboardParents(selection) {
+  var uniqueArtboards = [NSMutableArray array];
+  var hasSingleArtboardParents = true;
+  var loop = [selection objectEnumerator];
+
+  while ((selectionItem = [loop nextObject]) && hasSingleArtboardParents) {
+    var hasArtboardParent = false;
+    var parent = [selectionItem parentGroup];
+    var parentClass = [parent class];
+    while (parentClass != "MSPage" && !hasArtboardParent) {
+      if (parentClass == "MSArtboardGroup") {
+        hasArtboardParent = true;
+        if (![uniqueArtboards containsObject:parent]) {
+          [uniqueArtboards addObject:parent];
+        }
+      }
+      parent = [parent parentGroup];
+      parentClass = [parent class];
+    }
+    if (!hasArtboardParent || [uniqueArtboards count] > 1) {
+      hasSingleArtboardParents = false;
+      [doc showMessage:"Please make sure the shapes or layers you are moving are within a single artboard."];
+    }
   }
+  return hasSingleArtboardParents;
 }
 
 function hasValidSelectionCount(selection, minSelectionCount) {
