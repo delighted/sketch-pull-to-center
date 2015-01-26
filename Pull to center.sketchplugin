@@ -18,18 +18,22 @@ if (hasValidSelection && hasValidSelectionCount && hasSingleArtboardParents) {
     artboardCenterX = artboardWidth / 2,
     artboardCenterY = artboardHeight / 2;
   var distance = [doc askForUserInput:"Distance to move (pixels):" initialValue:"0"];
-  var loop = [selection objectEnumerator];
 
-  while (selectionItem = [loop nextObject]) {
-    var layer = selectionItem,
-      frame = [layer frame],
-      selectionWidth = [frame width],
-      selectionHeight = [frame height],
-      selectionX = [frame x],
-      selectionY = [frame y],
-      selectionCenteredX = selectionX + (selectionWidth / 2),
-      selectionCenteredY = selectionY + (selectionHeight / 2);
-    move(selectionItem, artboardCenterX, artboardCenterY, selectionCenteredX, selectionCenteredY, distance);
+  if (distance > 0) {
+    var loop = [selection objectEnumerator];
+    while (selectionItem = [loop nextObject]) {
+      var layer = selectionItem,
+        frame = [layer frame],
+        selectionWidth = [frame width],
+        selectionHeight = [frame height],
+        selectionX = [frame x],
+        selectionY = [frame y],
+        selectionCenteredX = selectionX + (selectionWidth / 2),
+        selectionCenteredY = selectionY + (selectionHeight / 2);
+      move(selectionItem, artboardCenterX, artboardCenterY, selectionCenteredX, selectionCenteredY, distance);
+    }
+  } else {
+    [doc showMessage:"Please enter a positive distance."];
   }
 }
 
