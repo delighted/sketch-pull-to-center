@@ -9,7 +9,7 @@ Sketch plugin to move selected shapes or layers toward the center of artboard.
 
 ## Installation
 
-1. [Download the latest release](https://github.com/mikegowen/sketch-pull-to-center/releases/latest) and unzip it.
+1. [Download the latest release](https://github.com/delighted/sketch-pull-to-center/releases/latest) and unzip it.
 2. In Sketch, navigate to "Plugins > Reveal Plugins Folder".
 3. Move "Pull to center.sketchplugin" to the "Plugins" folder.
 
