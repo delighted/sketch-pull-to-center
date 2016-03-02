@@ -1,0 +1,23 @@
+{
+  "author" : "Mike Gowen",
+  "commands" : [
+    {
+      "script" : "Pull to center.cocoascript",
+      "handler" : "onRun",
+      "shortcut" : "",
+      "name" : "Pull to center",
+      "identifier" : "pull-to-center"
+    }
+  ],
+  "menu" : {
+    "isRoot" : true,
+    "items" : [
+      "pull-to-center"
+    ]
+  },
+  "identifier" : "com.delighted.pull-to-center",
+  "version" : "2.0.0",
+  "description" : "Sketch plugin to move selected shapes or layers toward the center of artboard.",
+  "authorEmail" : "mike@delighted.com",
+  "name" : "Pull to center"
+}
