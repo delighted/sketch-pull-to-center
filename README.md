@@ -5,7 +5,7 @@ Sketch plugin to move selected shapes or layers toward the center of artboard.
 
 ## Demo
 
-![](https://dl.dropboxusercontent.com/u/159452/Github%20readme%20demos%20%5BDO%20NOT%20DELETE%5D/pull-to-center.gif)
+![](pull-to-center.gif)
 
 ## Installation
 
