@@ -27,6 +27,5 @@
     "type": "git",
     "url": "git+https://github.com/delighted/sketch-pull-to-center"
   },
-  "dependencies": {},
   "license": "MIT"
 }
