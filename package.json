@@ -22,7 +22,7 @@
   "devDependencies": {
     "@skpm/builder": "^0.5.5"
   },
-  "author": "Mike Gowen <mike@mikegowen.com>",
+  "author": "Mike Gowen <mike@delighted.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/delighted/sketch-pull-to-center"
