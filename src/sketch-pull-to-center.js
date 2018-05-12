@@ -45,7 +45,7 @@ function moveLayerTowardArtboardCenter(layer, artboard, distance) {
 }
 
 function validSelection(selectedLayers) {
-  if (selectedLayers.length < 0) return false;
+  if (selectedLayers.length < 1) return false;
   if (hasArtboardSelected(selectedLayers)) return false;
   let selectedLayerArtboards = layersArtboards(selectedLayers);
   if (hasOrphanLayerSelected(selectedLayerArtboards)) return false;
