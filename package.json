@@ -8,10 +8,7 @@
   "skpm": {
     "name": "sketch-pull-to-center",
     "manifest": "src/manifest.json",
-    "main": "sketch-pull-to-center.sketchplugin",
-    "assets": [
-      "assets/**/*"
-    ]
+    "main": "sketch-pull-to-center.sketchplugin"
   },
   "scripts": {
     "build": "skpm-build",
