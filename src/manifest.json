@@ -1,0 +1,24 @@
+{
+  "name": "Pull to center",
+  "description": "Sketch plugin to move selected shapes or layers toward the center of artboard.",
+  "author": "Mike Gowen",
+  "authorEmail" : "mike@delighted.com",
+  "homepage": "https://github.com/delighted/sketch-pull-to-center",
+  "version": "3.0.0",
+  "identifier": "com.delighted.pull-to-center",
+  "compatibleVersion": 3,
+  "bundleVersion": 1,
+  "commands" : [
+    {
+      "script" : "./sketch-pull-to-center.js",
+      "name" : "Pull to center",
+      "identifier" : "pull-to-center"
+    }
+  ],
+  "menu" : {
+    "isRoot" : true,
+    "items" : [
+      "pull-to-center"
+    ]
+  }
+}
