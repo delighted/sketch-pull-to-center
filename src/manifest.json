@@ -4,7 +4,7 @@
   "author": "Mike Gowen",
   "authorEmail" : "mike@delighted.com",
   "homepage": "https://github.com/delighted/sketch-pull-to-center",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "identifier": "com.delighted.pull-to-center",
   "compatibleVersion": 3,
   "bundleVersion": 1,
